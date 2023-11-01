@@ -4,6 +4,7 @@ import Players from "./components/Players/Players";
 import Header from "./components/layout/Header";
 import Log from "./components/Log/Log";
 import { WINNING_COMBINATIONS } from "./winning-combinations";
+import GameOver from "./components/GameOver/GameOver";
 
 const initialGameBoard = [
   [null, null, null],
@@ -26,7 +27,8 @@ function App() {
   const activePlayer = deriveActivePlayers(gameTurns);
 
   // deriving computed value from props(which is state in App)
-  let gameBoard = initialGameBoard;
+  // must ALWAYS make a copy of ARRAY before mutating! deeply nested arrays like this:
+  let gameBoard = [...initialGameBoard.map((row) => [...row])];
 
   for (const turn of gameTurns) {
     const { square, player } = turn;
@@ -55,6 +57,8 @@ function App() {
     }
   }
 
+  const hasDraw = gameTurns.length === 9 && !winner;
+
   const handleSelectSquare = (rowIndex, colIndex) => {
     //setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
 
@@ -76,13 +80,19 @@ function App() {
     });
   };
 
+  const handleRematch = () => {
+    setGameTurns([]);
+  };
+
   return (
     <>
       <Header />
       <main>
         <div id="game-container">
           <Players activePlayerSymbol={activePlayer} />
-          {winner && <p>You won, {winner}!</p>}
+          {(winner || hasDraw) && (
+            <GameOver winner={winner} onRematch={handleRematch} />
+          )}
           <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
         </div>
         <Log turns={gameTurns} />
