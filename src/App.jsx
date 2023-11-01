@@ -3,20 +3,30 @@ import GameBoard from "./components/GameBoard/GameBoard";
 import Players from "./components/Players/Players";
 import Header from "./components/layout/Header";
 import Log from "./components/Log/Log";
+import { WINNING_COMBINATIONS } from "./winning-combinations";
+
+console.log(WINNING_COMBINATIONS);
+
+const deriveActivePlayers = (gameTurns) => {
+  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+    return "O";
+  } else {
+    return "X";
+  }
+};
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-  const [activePlayer, setActivePlayer] = useState("X");
+  // const [activePlayer, setActivePlayer] = useState("X");
+
+  const activePlayer = deriveActivePlayers(gameTurns);
 
   const handleSelectSquare = (rowIndex, colIndex) => {
-    setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
+    //setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
 
     setGameTurns((prevTurns) => {
       // best practise is to NEVER merge states so instead of activePlayer, computed value currentPlayer
-      let currentPlayer = "X";
-      if (prevTurns.length > 0 && prevTurns[0].player === "X") {
-        currentPlayer = "O";
-      }
+      const currentPlayer = deriveActivePlayers(prevTurns);
 
       const updatedTurns = [
         {
