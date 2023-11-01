@@ -21,6 +21,10 @@ const deriveActivePlayers = (gameTurns) => {
 };
 
 function App() {
+  const [players, setPlayers] = useState({
+    X: "Player 1",
+    O: "Player 2",
+  });
   const [gameTurns, setGameTurns] = useState([]);
   // const [activePlayer, setActivePlayer] = useState("X");
 
@@ -28,7 +32,7 @@ function App() {
 
   // deriving computed value from props(which is state in App)
   // must ALWAYS make a copy of ARRAY before mutating! deeply nested arrays like this:
-  let gameBoard = [...initialGameBoard.map((row) => [...row])];
+  let gameBoard = [...initialGameBoard.map((array) => [...array])];
 
   for (const turn of gameTurns) {
     const { square, player } = turn;
@@ -53,7 +57,7 @@ function App() {
       // and 3rd
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
 
@@ -80,16 +84,31 @@ function App() {
     });
   };
 
+  const handleChangePlayerName = (symbol, newName) => {
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers,
+        // dynamicaly setting property: [key] = value
+        [symbol]: newName,
+      };
+    });
+  };
+
   const handleRematch = () => {
     setGameTurns([]);
   };
+
+  console.log(players);
 
   return (
     <>
       <Header />
       <main>
         <div id="game-container">
-          <Players activePlayerSymbol={activePlayer} />
+          <Players
+            activePlayerSymbol={activePlayer}
+            onChangePlayerName={handleChangePlayerName}
+          />
           {(winner || hasDraw) && (
             <GameOver winner={winner} onRematch={handleRematch} />
           )}
