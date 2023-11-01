@@ -28,6 +28,7 @@ function App() {
         },
         ...prevTurns,
       ];
+      return updatedTurns;
     });
   };
 
@@ -37,7 +38,7 @@ function App() {
       <main>
         <div id="game-container">
           <Players activePlayerSymbol={activePlayer} />
-          <GameBoard onSelectSquare={handleSelectSquare} />
+          <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
         </div>
         <Log />
       </main>

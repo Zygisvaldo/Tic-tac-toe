@@ -4,22 +4,15 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-const GameBoard = ({ onSelectSquare }) => {
-  /*   const [gameBoard, setGameBoard] = useState(initialGameBoard);
+const GameBoard = ({ onSelectSquare, turns }) => {
+  // deriving computed value from props(which is state in App)
+  let gameBoard = initialGameBoard;
 
-  const handleSelectSquare = (rowIndex, colIndex) => {
-    setGameBoard((prevGameBoard) => {
-      // updating in an unmutable way / making a copy of array + its nested inner arrays
-      const updatedGameBoard = [
-        ...prevGameBoard.map((innerArray) => [...innerArray]),
-      ];
-      if (!updatedGameBoard[rowIndex][colIndex]) {
-        updatedGameBoard[rowIndex][colIndex] = activePlayerSymbol;
-        onSelectSquare(); // lifting state up to App comp
-      }
-      return updatedGameBoard;
-    });
-  }; */
+  for (const turn of turns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
+  }
 
   return (
     <ol id="game-board">
