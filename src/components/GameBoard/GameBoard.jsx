@@ -6,19 +6,8 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-const GameBoard = () => {
-  const [currPlayer, setCurrPlayer] = useState("X");
+const GameBoard = ({ currPlayer, onSelectSquare }) => {
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
-
-  const handlePlayerChange = () => {
-    setCurrPlayer((prevPlayer) => {
-      if (prevPlayer === "X") {
-        return "O";
-      } else {
-        return "X";
-      }
-    });
-  };
 
   const handleSelectSquare = (rowIndex, colIndex) => {
     setGameBoard((prevGameBoard) => {
@@ -28,13 +17,11 @@ const GameBoard = () => {
       ];
       if (!updatedGameBoard[rowIndex][colIndex]) {
         updatedGameBoard[rowIndex][colIndex] = currPlayer;
-        handlePlayerChange();
+        onSelectSquare(); // lifting state up to App comp
       }
       return updatedGameBoard;
     });
   };
-
-  console.log(currPlayer);
 
   return (
     <ol id="game-board">
