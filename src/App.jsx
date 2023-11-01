@@ -5,7 +5,11 @@ import Header from "./components/layout/Header";
 import Log from "./components/Log/Log";
 import { WINNING_COMBINATIONS } from "./winning-combinations";
 
-console.log(WINNING_COMBINATIONS);
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
 
 const deriveActivePlayers = (gameTurns) => {
   if (gameTurns.length > 0 && gameTurns[0].player === "X") {
@@ -20,6 +24,36 @@ function App() {
   // const [activePlayer, setActivePlayer] = useState("X");
 
   const activePlayer = deriveActivePlayers(gameTurns);
+
+  // deriving computed value from props(which is state in App)
+  let gameBoard = initialGameBoard;
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
+  }
+
+  let winner;
+
+  // getting every symbol that is stored in the winning combination for its EACH square/ cell
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].col];
+    const secondSquareSymbol =
+      gameBoard[combination[1].row][combination[1].col];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].col];
+
+    if (
+      // not null
+      firstSquareSymbol &&
+      // and the same as 2nd
+      firstSquareSymbol === secondSquareSymbol &&
+      // and 3rd
+      firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = firstSquareSymbol;
+    }
+  }
 
   const handleSelectSquare = (rowIndex, colIndex) => {
     //setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
@@ -48,7 +82,8 @@ function App() {
       <main>
         <div id="game-container">
           <Players activePlayerSymbol={activePlayer} />
-          <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
+          {winner && <p>You won, {winner}!</p>}
+          <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
         </div>
         <Log turns={gameTurns} />
       </main>
