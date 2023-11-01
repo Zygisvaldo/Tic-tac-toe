@@ -1,10 +1,10 @@
 import Player from "./Player";
 
-const Players = ({ currPlayer }) => {
+const Players = ({ activePlayerSymbol }) => {
   return (
     <ol id="players" className="highlight-player">
-      <Player isActive={currPlayer === "X"} initialName="Player 1" symbol="X" />
-      <Player isActive={currPlayer === "O"} initialName="Player 2" symbol="O" />
+      <Player isActive={activePlayerSymbol === "X"} initialName="Player 1" symbol="X" />
+      <Player isActive={activePlayerSymbol === "O"} initialName="Player 2" symbol="O" />
     </ol>
   );
 };

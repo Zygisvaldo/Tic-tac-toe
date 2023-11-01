@@ -17,9 +17,9 @@ function App() {
       <Header />
       <main>
         <div id="game-container">
-          <Players currPlayer={activePlayer} />
+          <Players activePlayerSymbol={activePlayer} />
           <GameBoard
-            currPlayer={activePlayer}
+            activePlayerSymbol={activePlayer}
             onSelectSquare={handleSelectSquare}
           />
         </div>

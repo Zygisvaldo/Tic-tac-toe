@@ -6,7 +6,7 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-const GameBoard = ({ currPlayer, onSelectSquare }) => {
+const GameBoard = ({ activePlayerSymbol, onSelectSquare }) => {
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
   const handleSelectSquare = (rowIndex, colIndex) => {
@@ -16,7 +16,7 @@ const GameBoard = ({ currPlayer, onSelectSquare }) => {
         ...prevGameBoard.map((innerArray) => [...innerArray]),
       ];
       if (!updatedGameBoard[rowIndex][colIndex]) {
-        updatedGameBoard[rowIndex][colIndex] = currPlayer;
+        updatedGameBoard[rowIndex][colIndex] = activePlayerSymbol;
         onSelectSquare(); // lifting state up to App comp
       }
       return updatedGameBoard;
