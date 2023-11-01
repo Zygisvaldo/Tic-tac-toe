@@ -1,3 +1,4 @@
+import GameBoard from "./components/GameBoard/GameBoard";
 import Players from "./components/Players/Players";
 import Header from "./components/layout/Header";
 
@@ -8,7 +9,7 @@ function App() {
       <main>
         <div id="game-container">
           <Players />
-          GameBoard
+          <GameBoard />
         </div>
         LOG
       </main>
