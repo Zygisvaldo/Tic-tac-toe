@@ -20,29 +20,9 @@ const deriveActivePlayers = (gameTurns) => {
   }
 };
 
-function App() {
-  const [players, setPlayers] = useState({
-    X: "Player 1",
-    O: "Player 2",
-  });
-  const [gameTurns, setGameTurns] = useState([]);
-  // const [activePlayer, setActivePlayer] = useState("X");
-
-  const activePlayer = deriveActivePlayers(gameTurns);
-
-  // deriving computed value from props(which is state in App)
-  // must ALWAYS make a copy of ARRAY before mutating! deeply nested arrays like this:
-  let gameBoard = [...initialGameBoard.map((array) => [...array])];
-
-  for (const turn of gameTurns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-    gameBoard[row][col] = player;
-  }
-
+const deriveWinner = (gameBoard, players) => {
   let winner;
 
-  // getting every symbol that is stored in the winning combination for its EACH square/ cell
   for (const combination of WINNING_COMBINATIONS) {
     const firstSquareSymbol = gameBoard[combination[0].row][combination[0].col];
     const secondSquareSymbol =
@@ -50,24 +30,40 @@ function App() {
     const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].col];
 
     if (
-      // not null
       firstSquareSymbol &&
-      // and the same as 2nd
       firstSquareSymbol === secondSquareSymbol &&
-      // and 3rd
       firstSquareSymbol === thirdSquareSymbol
     ) {
       winner = players[firstSquareSymbol];
     }
   }
+  return winner;
+};
 
+const deriveGameBoard = (gameTurns) => {
+  let gameBoard = [...initialGameBoard.map((array) => [...array])];
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
+  }
+  return gameBoard;
+};
+
+const App = () => {
+  const [players, setPlayers] = useState({
+    X: "Player 1",
+    O: "Player 2",
+  });
+  const [gameTurns, setGameTurns] = useState([]);
+  const activePlayer = deriveActivePlayers(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
 
   const handleSelectSquare = (rowIndex, colIndex) => {
-    //setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
-
     setGameTurns((prevTurns) => {
-      // best practise is to NEVER merge states so instead of activePlayer, computed value currentPlayer
       const currentPlayer = deriveActivePlayers(prevTurns);
 
       const updatedTurns = [
@@ -88,7 +84,6 @@ function App() {
     setPlayers((prevPlayers) => {
       return {
         ...prevPlayers,
-        // dynamicaly setting property: [key] = value
         [symbol]: newName,
       };
     });
@@ -97,8 +92,6 @@ function App() {
   const handleRematch = () => {
     setGameTurns([]);
   };
-
-  console.log(players);
 
   return (
     <>
@@ -118,6 +111,6 @@ function App() {
       </main>
     </>
   );
-}
+};
 
 export default App;
